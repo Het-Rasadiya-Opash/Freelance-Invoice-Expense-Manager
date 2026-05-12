@@ -4,6 +4,8 @@ import cors from "cors";
 import errorHandler from "./middlewares/error.middleware.js";
 export const app = express();
 
+import userRouter from "./routes/user.route.js";
+
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -14,6 +16,8 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
+app.use("/api/users", userRouter);
 
 //error handler
 app.use(errorHandler);
