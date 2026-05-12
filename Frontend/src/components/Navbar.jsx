@@ -17,7 +17,7 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import { Person, Settings, Logout } from "@mui/icons-material";
+import { Person, Settings, Logout, PersonAdd } from "@mui/icons-material";
 import apiRequest from "../utils/apiRequest";
 
 const Navbar = () => {
@@ -126,7 +126,6 @@ const Navbar = () => {
                     },
                   }}
                 >
-                  {/* User Info Header */}
                   <Box sx={{ px: 2, py: 1.5 }}>
                     <Box
                       sx={{ display: "flex", alignItems: "center", gap: 1.5 }}
@@ -156,26 +155,18 @@ const Navbar = () => {
 
                   <Divider sx={{ my: 0.5 }} />
 
-                  {/* Menu Items */}
-                  <MenuItem onClick={handleProfile} sx={{ py: 1, px: 2 }}>
+                  <MenuItem
+                    onClick={() => {
+                      handleMenuClose();
+                      navigate("/create-client");
+                    }}
+                    sx={{ py: 1, px: 2 }}
+                  >
                     <ListItemIcon>
-                      <Person fontSize="small" sx={{ color: "#14a800" }} />
+                      <PersonAdd fontSize="small" sx={{ color: "#14a800" }} />
                     </ListItemIcon>
                     <ListItemText
-                      primary="My Profile"
-                      primaryTypographyProps={{
-                        variant: "body2",
-                        fontWeight: 500,
-                      }}
-                    />
-                  </MenuItem>
-
-                  <MenuItem onClick={handleMenuClose} sx={{ py: 1, px: 2 }}>
-                    <ListItemIcon>
-                      <Settings fontSize="small" sx={{ color: "#14a800" }} />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Settings"
+                      primary="Create Client"
                       primaryTypographyProps={{
                         variant: "body2",
                         fontWeight: 500,

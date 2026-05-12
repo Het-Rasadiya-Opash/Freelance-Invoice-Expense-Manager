@@ -11,10 +11,11 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Navbar from "./components/Navbar";
 
+
 const App = () => {
   const location = useLocation();
 
-  const hideNavbar = ["/login", "/register"].includes(location.pathname);
+  const hideNavbar = ["/", "/login", "/register"].includes(location.pathname);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -36,6 +37,7 @@ const App = () => {
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
+
         </Route>
 
         <Route path="/login" element={<Login />} />
