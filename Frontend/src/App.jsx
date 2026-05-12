@@ -6,6 +6,7 @@ import { Route, Routes } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
+import Register from "./pages/Register";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -30,9 +31,11 @@ const App = () => {
         </Route>
 
         <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
     </div>
   );
 };
 
 export default App;
+
