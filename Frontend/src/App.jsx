@@ -2,15 +2,20 @@ import React, { useEffect } from "react";
 import apiRequest from "./utils/apiRequest";
 import { useDispatch } from "react-redux";
 import { setCheckingAuth, setCurrentUser } from "./features/usersSlice";
-import { Route, Routes } from "react-router";
+import { Route, Routes, useLocation } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
+import Navbar from "./components/Navbar";
 
 const App = () => {
+  const location = useLocation();
+
+  const hideNavbar = ["/login", "/register"].includes(location.pathname);
+
   const dispatch = useDispatch();
   useEffect(() => {
     const checkAuth = async () => {
@@ -27,6 +32,7 @@ const App = () => {
 
   return (
     <div>
+      {!hideNavbar && <Navbar />}
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
@@ -42,4 +48,3 @@ const App = () => {
 };
 
 export default App;
-
