@@ -5,6 +5,7 @@ import errorHandler from "./middlewares/error.middleware.js";
 export const app = express();
 
 import userRouter from "./routes/user.route.js";
+import clientRouter from "./routes/client.route.js";
 
 app.use(
   cors({
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/api/users", userRouter);
+app.use("/api/clients", clientRouter);
 
 //error handler
 app.use(errorHandler);
