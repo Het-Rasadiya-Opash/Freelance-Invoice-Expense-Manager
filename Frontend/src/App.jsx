@@ -5,6 +5,7 @@ import { setCheckingAuth, setCurrentUser } from "./features/usersSlice";
 import { Route, Routes } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
+import Home from "./pages/Home";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -24,7 +25,10 @@ const App = () => {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<ProtectedRoute />} />
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+
         <Route path="/login" element={<Login />} />
       </Routes>
     </div>
