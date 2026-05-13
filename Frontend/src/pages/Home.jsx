@@ -35,6 +35,7 @@ import {
 import Dashboard from "../components/Dashboard";
 import Client from "../components/Client";
 import Project from "../components/Project";
+import TimeEntries from "../components/TimeEntries";
 
 const menuSections = [
   {
@@ -298,6 +299,7 @@ const Home = () => {
           {activeTab === "dashboard" && <Dashboard />}
           {activeTab === "clients" && <Client />}
           {activeTab === "projects" && <Project />}
+          {activeTab === "time_entries" && <TimeEntries />}
         </Box>
       </Box>
     </Box>
