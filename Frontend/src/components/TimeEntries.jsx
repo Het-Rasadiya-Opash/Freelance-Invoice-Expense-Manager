@@ -13,15 +13,6 @@ import CreateTimeEntries from "./CreateTimeEntries";
 import GetAllTimeEntries from "./GetAllTimeEntries";
 import apiRequest from "../utils/apiRequest";
 
-const SORT_OPTIONS = [
-  { label: "Newest First", value: "createdAt_desc" },
-  { label: "Oldest First", value: "createdAt_asc" },
-  { label: "Longest Duration", value: "durationMinutes_desc" },
-  { label: "Shortest Duration", value: "durationMinutes_asc" },
-  { label: "Start Time (Latest)", value: "startTime_desc" },
-  { label: "Start Time (Earliest)", value: "startTime_asc" },
-];
-
 const filterInputSx = {
   "& .MuiOutlinedInput-root": {
     borderRadius: "8px",
@@ -43,9 +34,6 @@ const TimeEntries = () => {
   const [filterClientId, setFilterClientId] = useState("");
   const [filterBilled, setFilterBilled] = useState("");
   const [filterRunning, setFilterRunning] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [sortBy, setSortBy] = useState("createdAt_desc");
 
   const [filteredEntries, setFilteredEntries] = useState([]);
 
@@ -65,33 +53,20 @@ const TimeEntries = () => {
 
   const fetchTimeEntries = useCallback(async () => {
     try {
-      const [field, order] = sortBy.split("_");
       const params = {
-        sortBy: field,
-        sortOrder: order,
         limit: 100,
       };
       if (filterProjectId) params.projectId = filterProjectId;
       if (filterClientId) params.clientId = filterClientId;
       if (filterBilled !== "") params.isBilled = filterBilled;
       if (filterRunning !== "") params.isRunning = filterRunning;
-      if (startDate) params.startDate = startDate;
-      if (endDate) params.endDate = endDate;
 
       const res = await apiRequest.get("/time-entries", { params });
       setTimeEntries(res.data.data?.timeEntries || []);
     } catch (error) {
       console.error("Failed to fetch time entries:", error);
     }
-  }, [
-    filterProjectId,
-    filterClientId,
-    filterBilled,
-    filterRunning,
-    startDate,
-    endDate,
-    sortBy,
-  ]);
+  }, [filterProjectId, filterClientId, filterBilled, filterRunning]);
 
   useEffect(() => {
     fetchTimeEntries();
@@ -132,9 +107,6 @@ const TimeEntries = () => {
     setFilterClientId("");
     setFilterBilled("");
     setFilterRunning("");
-    setStartDate("");
-    setEndDate("");
-    setSortBy("createdAt_desc");
   };
 
   const hasActiveFilters =
@@ -143,25 +115,23 @@ const TimeEntries = () => {
     filterClientId ||
     filterBilled !== "" ||
     filterRunning !== "" ||
-    startDate ||
-    endDate ||
-    sortBy !== "createdAt_desc";
+    false;
 
   return (
     <div>
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           alignItems: "center",
           mb: 3,
           flexWrap: "wrap",
           gap: 2,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: 800, color: "#333" }}>
+        {/* <Typography variant="h5" sx={{ fontWeight: 800, color: "#333" }}>
           Time Entries
-        </Typography>
+        </Typography> */}
         <Button
           variant="contained"
           startIcon={<Add />}
@@ -294,45 +264,6 @@ const TimeEntries = () => {
             <MenuItem value="true">Running</MenuItem>
             <MenuItem value="false">Stopped</MenuItem>
           </TextField>
-        </Box>
-
-        <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2 }}>
-          <TextField
-            label="From Date"
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            sx={{ ...filterInputSx, flex: "1 1 160px", minWidth: 155 }}
-          />
-
-          <TextField
-            label="To Date"
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            size="small"
-            InputLabelProps={{ shrink: true }}
-            sx={{ ...filterInputSx, flex: "1 1 160px", minWidth: 155 }}
-          />
-
-          <TextField
-            select
-            label="Sort By"
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value)}
-            size="small"
-            sx={{ ...filterInputSx, flex: "1 1 180px", minWidth: 170 }}
-          >
-            {SORT_OPTIONS.map((opt) => (
-              <MenuItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <Box sx={{ flex: "2 1 0" }} />
         </Box>
 
         {(filterProjectId ||

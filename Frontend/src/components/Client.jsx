@@ -39,14 +39,14 @@ const Client = () => {
       <Box
         sx={{
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           alignItems: "center",
           mb: 3,
         }}
       >
-        <Typography variant="h5" sx={{ fontWeight: 800, color: "#333" }}>
+        {/* <Typography variant="h5" sx={{ fontWeight: 800, color: "#333" }}>
           Clients
-        </Typography>
+        </Typography> */}
         <Button
           variant="contained"
           startIcon={<Add />}
