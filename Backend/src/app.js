@@ -8,6 +8,7 @@ import userRouter from "./routes/user.route.js";
 import clientRouter from "./routes/client.route.js";
 import projectRouter from "./routes/project.route.js";
 import timeEntryRouter from "./routes/timeEntry.route.js";
+import invoiceRouter from "./routes/invoice.route.js";
 
 app.use(
   cors({
@@ -24,6 +25,7 @@ app.use("/api/users", userRouter);
 app.use("/api/clients", clientRouter);
 app.use("/api/projects", projectRouter);
 app.use("/api/time-entries", timeEntryRouter);
+app.use("/api/invoices", invoiceRouter);
 
 //error handler
 app.use(errorHandler);

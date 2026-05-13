@@ -102,7 +102,6 @@ const invoiceSchema = new mongoose.Schema(
     },
     invoiceNumber: {
       type: String,
-      required: [true, "Invoice number is required"],
       trim: true,
     },
     status: {
@@ -190,30 +189,39 @@ const invoiceSchema = new mongoose.Schema(
   },
 );
 
+invoiceSchema.pre("validate", async function () {
+  if (!this.invoiceNumber) {
+    const count = await this.constructor.countDocuments({
+      userId: this.userId,
+    });
+    this.invoiceNumber = `INV-${String(count + 1).padStart(4, "0")}`;
+  }
+});
+
 invoiceSchema.pre("save", function () {
   if (this.status === "SENT" && this.dueDate && new Date() > this.dueDate) {
     this.status = "OVERDUE";
   }
 });
 
-invoiceSchema.pre("save", function () {
+invoiceSchema.pre("validate", function () {
   if (
     this.isModified("lineItems") ||
     this.isModified("taxRate") ||
     this.isModified("discountAmount")
   ) {
     this.lineItems.forEach((item) => {
-      item.amount = parseFloat((item.quantity * item.unitPrice).toFixed(2));
+      item.amount = parseFloat(((item.quantity || 0) * (item.unitPrice || 0)).toFixed(2));
     });
 
-    const subtotal = this.lineItems.reduce((sum, item) => sum + item.amount, 0);
+    const subtotal = this.lineItems.reduce((sum, item) => sum + (item.amount || 0), 0);
     this.subtotal = parseFloat(subtotal.toFixed(2));
 
-    const taxAmount = parseFloat(((subtotal * this.taxRate) / 100).toFixed(2));
+    const taxAmount = parseFloat(((subtotal * (this.taxRate || 0)) / 100).toFixed(2));
     this.taxAmount = taxAmount;
 
     const total = parseFloat(
-      (subtotal + taxAmount - this.discountAmount).toFixed(2),
+      (subtotal + taxAmount - (this.discountAmount || 0)).toFixed(2),
     );
     this.total = Math.max(0, total);
   }
