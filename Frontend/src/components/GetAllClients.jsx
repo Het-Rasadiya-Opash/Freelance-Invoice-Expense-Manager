@@ -49,17 +49,22 @@ const GetAllClients = ({ clients, onEdit, onRefresh }) => {
   }
 
   return (
-    <Box sx={{ mt: 4 }}>
+    <Box sx={{ mt: 4, width: "100%", minWidth: 0 }}>
       <TableContainer
         component={Paper}
+        className="clients-table-container"
         sx={{
+          width: "100%",
+          maxWidth: "100%",
           borderRadius: "12px",
           boxShadow: "0 10px 30px rgba(0,0,0,0.03)",
-          overflow: "hidden",
+          overflowX: "auto",
+          overflowY: "hidden",
           border: "1px solid #eef2eb",
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        <Table sx={{ minWidth: 650 }} aria-label="clients table">
+        <Table sx={{ minWidth: 760 }} aria-label="clients table">
           <TableHead sx={{ backgroundColor: "#f4fcf0" }}>
             <TableRow>
               <TableCell sx={{ fontWeight: 700, color: "#555", py: 2 }}>

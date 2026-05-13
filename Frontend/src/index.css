@@ -1,0 +1,17 @@
+.clients-table-container {
+  scrollbar-width: thin;
+  scrollbar-color: #c8d6c2 #f4fcf0;
+}
+
+.clients-table-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.clients-table-container::-webkit-scrollbar-thumb {
+  background-color: #c8d6c2;
+  border-radius: 8px;
+}
+
+.clients-table-container::-webkit-scrollbar-track {
+  background-color: #f4fcf0;
+}
