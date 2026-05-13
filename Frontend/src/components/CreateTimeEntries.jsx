@@ -73,7 +73,7 @@ const defaultForm = () => ({
   projectId: "",
   description: "",
   isManual: false,
-  isRunning: false,
+  isRunning: true,
   startTime: "",
   endTime: "",
   durationMinutes: "",
