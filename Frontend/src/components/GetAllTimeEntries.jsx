@@ -221,7 +221,7 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                     />
                   ) : (
                     <Chip
-                      label="Running"
+                      label="Timer"
                       size="small"
                       icon={<Timer sx={{ fontSize: "14px !important" }} />}
                       sx={{
@@ -263,8 +263,9 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                   )}
                 </TableCell>
 
-                <TableCell sx={{ py: 2, textAlign: "center", whiteSpace: "nowrap" }}>
-
+                <TableCell
+                  sx={{ py: 2, textAlign: "center", whiteSpace: "nowrap" }}
+                >
                   {entry.isRunning && (
                     <Tooltip title="Stop Timer">
                       <span>
@@ -272,13 +273,17 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                           onClick={() => handleStop(entry._id)}
                           disabled={stoppingId === entry._id}
                           sx={{
-                            color: stoppingId === entry._id ? "#ccc" : "#f57c00",
+                            color:
+                              stoppingId === entry._id ? "#ccc" : "#f57c00",
                             mr: 0.5,
                           }}
                           aria-label="stop timer"
                         >
                           {stoppingId === entry._id ? (
-                            <CircularProgress size={20} sx={{ color: "#f57c00" }} />
+                            <CircularProgress
+                              size={20}
+                              sx={{ color: "#f57c00" }}
+                            />
                           ) : (
                             <StopCircle />
                           )}
@@ -287,13 +292,20 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                     </Tooltip>
                   )}
 
-                  <Tooltip title={entry.isBilled ? "Cannot edit a billed entry" : "Edit"}>
+                  <Tooltip
+                    title={
+                      entry.isBilled ? "Cannot edit a billed entry" : "Edit"
+                    }
+                  >
                     <span>
                       <IconButton
                         onClick={() => onEdit(entry)}
                         disabled={entry.isBilled || entry.isRunning}
                         sx={{
-                          color: entry.isBilled || entry.isRunning ? "#ccc" : "#14a800",
+                          color:
+                            entry.isBilled || entry.isRunning
+                              ? "#ccc"
+                              : "#14a800",
                           mr: 0.5,
                         }}
                         aria-label="edit"
@@ -303,7 +315,11 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                     </span>
                   </Tooltip>
 
-                  <Tooltip title={entry.isBilled ? "Cannot delete a billed entry" : "Delete"}>
+                  <Tooltip
+                    title={
+                      entry.isBilled ? "Cannot delete a billed entry" : "Delete"
+                    }
+                  >
                     <span>
                       <IconButton
                         onClick={() => handleDelete(entry._id)}
