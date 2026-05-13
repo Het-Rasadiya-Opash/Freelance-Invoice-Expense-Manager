@@ -9,7 +9,7 @@ const lineItemSchema = new mongoose.Schema(
     },
     type: {
       type: String,
-      enum: ["TIME", "FLAT"], // "time" = from a TimeEntry, "flat" = manual fee
+      enum: ["TIME", "FLAT"],
       required: true,
     },
     timeEntryId: {
@@ -211,13 +211,20 @@ invoiceSchema.pre("validate", function () {
     this.isModified("discountAmount")
   ) {
     this.lineItems.forEach((item) => {
-      item.amount = parseFloat(((item.quantity || 0) * (item.unitPrice || 0)).toFixed(2));
+      item.amount = parseFloat(
+        ((item.quantity || 0) * (item.unitPrice || 0)).toFixed(2),
+      );
     });
 
-    const subtotal = this.lineItems.reduce((sum, item) => sum + (item.amount || 0), 0);
+    const subtotal = this.lineItems.reduce(
+      (sum, item) => sum + (item.amount || 0),
+      0,
+    );
     this.subtotal = parseFloat(subtotal.toFixed(2));
 
-    const taxAmount = parseFloat(((subtotal * (this.taxRate || 0)) / 100).toFixed(2));
+    const taxAmount = parseFloat(
+      ((subtotal * (this.taxRate || 0)) / 100).toFixed(2),
+    );
     this.taxAmount = taxAmount;
 
     const total = parseFloat(
