@@ -34,6 +34,7 @@ import {
 } from "@mui/icons-material";
 import Dashboard from "../components/Dashboard";
 import Client from "../components/Client";
+import Project from "../components/Project";
 
 const menuSections = [
   {
@@ -296,6 +297,7 @@ const Home = () => {
 
           {activeTab === "dashboard" && <Dashboard />}
           {activeTab === "clients" && <Client />}
+          {activeTab === "projects" && <Project />}
         </Box>
       </Box>
     </Box>
