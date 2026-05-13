@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router";
 import { logout } from "../features/usersSlice";
@@ -36,32 +36,54 @@ import Dashboard from "../components/Dashboard";
 import Client from "../components/Client";
 import Project from "../components/Project";
 import TimeEntries from "../components/TimeEntries";
-
-const menuSections = [
-  {
-    title: "MAIN",
-    items: [
-      { key: "dashboard", label: "Dashboard", icon: <DashboardIcon /> },
-      { key: "invoices", label: "Invoices", icon: <ReceiptLong />, badge: 3 },
-      { key: "clients", label: "Clients", icon: <Groups /> },
-      { key: "projects", label: "Projects", icon: <Description /> },
-    ],
-  },
-  {
-    title: "TRACK",
-    items: [
-      { key: "time_entries", label: "Time Entries", icon: <AccessTime /> },
-      { key: "expenses", label: "Expenses", icon: <AccountBalanceWallet /> },
-      { key: "reports", label: "Reports", icon: <Assessment /> },
-    ],
-  },
-];
+import Invoice from "../components/Invoice";
 
 const Home = () => {
   const { currentUser } = useSelector((state) => state.users);
   const [activeTab, setActiveTab] = useState("dashboard");
+  const [invoiceCount, setInvoiceCount] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchInvoiceCount = async () => {
+      try {
+        const res = await apiRequest.get("/invoices");
+        setInvoiceCount(res.data.data.pagination.total || 0);
+      } catch (error) {
+        console.error("Failed to fetch invoice count:", error);
+      }
+    };
+    fetchInvoiceCount();
+
+    const interval = setInterval(fetchInvoiceCount, 30000); 
+    return () => clearInterval(interval);
+  }, [activeTab]);
+
+  const menuSections = [
+    {
+      title: "MAIN",
+      items: [
+        { key: "dashboard", label: "Dashboard", icon: <DashboardIcon /> },
+        {
+          key: "invoices",
+          label: "Invoices",
+          icon: <ReceiptLong />,
+          badge: invoiceCount,
+        },
+        { key: "clients", label: "Clients", icon: <Groups /> },
+        { key: "projects", label: "Projects", icon: <Description /> },
+      ],
+    },
+    {
+      title: "TRACK",
+      items: [
+        { key: "time_entries", label: "Time Entries", icon: <AccessTime /> },
+        { key: "expenses", label: "Expenses", icon: <AccountBalanceWallet /> },
+        { key: "reports", label: "Reports", icon: <Assessment /> },
+      ],
+    },
+  ];
 
   const handleLogout = async () => {
     try {
@@ -300,6 +322,7 @@ const Home = () => {
           {activeTab === "clients" && <Client />}
           {activeTab === "projects" && <Project />}
           {activeTab === "time_entries" && <TimeEntries />}
+          {activeTab === "invoices" && <Invoice />}
         </Box>
       </Box>
     </Box>
