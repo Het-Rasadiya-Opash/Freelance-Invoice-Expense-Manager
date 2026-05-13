@@ -6,6 +6,7 @@ export const app = express();
 
 import userRouter from "./routes/user.route.js";
 import clientRouter from "./routes/client.route.js";
+import projectRouter from "./routes/project.route.js";
 
 app.use(
   cors({
@@ -20,6 +21,7 @@ app.use(cookieParser());
 
 app.use("/api/users", userRouter);
 app.use("/api/clients", clientRouter);
+app.use("/api/projects", projectRouter);
 
 //error handler
 app.use(errorHandler);
