@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Table,
   TableBody,
@@ -11,8 +11,10 @@ import {
   Box,
   IconButton,
   Chip,
+  Tooltip,
+  CircularProgress,
 } from "@mui/material";
-import { Edit, Delete, Timer, EditNote } from "@mui/icons-material";
+import { Edit, Delete, Timer, EditNote, StopCircle } from "@mui/icons-material";
 import apiRequest from "../utils/apiRequest";
 
 const formatDuration = (minutes) => {
@@ -33,6 +35,21 @@ const formatDateTime = (dateStr) => {
 };
 
 const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
+  const [stoppingId, setStoppingId] = useState(null);
+
+  const handleStop = async (id) => {
+    setStoppingId(id);
+    try {
+      await apiRequest.patch(`/time-entries/${id}/stop`);
+      onRefresh();
+    } catch (error) {
+      console.error("Failed to stop timer:", error);
+      alert(error?.response?.data?.message || "Failed to stop timer");
+    } finally {
+      setStoppingId(null);
+    }
+  };
+
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this time entry?")) {
       try {
@@ -204,7 +221,7 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                     />
                   ) : (
                     <Chip
-                      label="Timer"
+                      label="Running"
                       size="small"
                       icon={<Timer sx={{ fontSize: "14px !important" }} />}
                       sx={{
@@ -246,32 +263,58 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
                   )}
                 </TableCell>
 
-                <TableCell sx={{ py: 2, textAlign: "center" }}>
-                  <IconButton
-                    onClick={() => onEdit(entry)}
-                    disabled={entry.isBilled}
-                    sx={{
-                      color: entry.isBilled ? "#ccc" : "#14a800",
-                      mr: 0.5,
-                    }}
-                    aria-label="edit"
-                    title={
-                      entry.isBilled ? "Cannot edit a billed entry" : "Edit"
-                    }
-                  >
-                    <Edit />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleDelete(entry._id)}
-                    disabled={entry.isBilled}
-                    sx={{ color: entry.isBilled ? "#ccc" : "#d32f2f" }}
-                    aria-label="delete"
-                    title={
-                      entry.isBilled ? "Cannot delete a billed entry" : "Delete"
-                    }
-                  >
-                    <Delete />
-                  </IconButton>
+                <TableCell sx={{ py: 2, textAlign: "center", whiteSpace: "nowrap" }}>
+
+                  {entry.isRunning && (
+                    <Tooltip title="Stop Timer">
+                      <span>
+                        <IconButton
+                          onClick={() => handleStop(entry._id)}
+                          disabled={stoppingId === entry._id}
+                          sx={{
+                            color: stoppingId === entry._id ? "#ccc" : "#f57c00",
+                            mr: 0.5,
+                          }}
+                          aria-label="stop timer"
+                        >
+                          {stoppingId === entry._id ? (
+                            <CircularProgress size={20} sx={{ color: "#f57c00" }} />
+                          ) : (
+                            <StopCircle />
+                          )}
+                        </IconButton>
+                      </span>
+                    </Tooltip>
+                  )}
+
+                  <Tooltip title={entry.isBilled ? "Cannot edit a billed entry" : "Edit"}>
+                    <span>
+                      <IconButton
+                        onClick={() => onEdit(entry)}
+                        disabled={entry.isBilled || entry.isRunning}
+                        sx={{
+                          color: entry.isBilled || entry.isRunning ? "#ccc" : "#14a800",
+                          mr: 0.5,
+                        }}
+                        aria-label="edit"
+                      >
+                        <Edit />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
+
+                  <Tooltip title={entry.isBilled ? "Cannot delete a billed entry" : "Delete"}>
+                    <span>
+                      <IconButton
+                        onClick={() => handleDelete(entry._id)}
+                        disabled={entry.isBilled}
+                        sx={{ color: entry.isBilled ? "#ccc" : "#d32f2f" }}
+                        aria-label="delete"
+                      >
+                        <Delete />
+                      </IconButton>
+                    </span>
+                  </Tooltip>
                 </TableCell>
               </TableRow>
             ))}
