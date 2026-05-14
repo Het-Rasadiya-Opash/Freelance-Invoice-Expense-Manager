@@ -32,7 +32,7 @@ import {
   Assessment,
   Logout,
 } from "@mui/icons-material";
-import Dashboard from "../components/Dashboard";
+import Dashboard from "../components/dashboard/Dashboard";
 import Client from "../components/client/Client";
 import Project from "../components/project/Project";
 import TimeEntries from "../components/timeEntry/TimeEntries";
