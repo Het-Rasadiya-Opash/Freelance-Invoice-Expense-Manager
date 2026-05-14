@@ -9,6 +9,7 @@ export const createInvoice = asyncHandler(async (req, res) => {
     clientId,
     projectId,
     invoiceNumber,
+    status,
     dueDate,
     lineItems,
     taxRate,
@@ -40,6 +41,7 @@ export const createInvoice = asyncHandler(async (req, res) => {
     clientId,
     projectId: projectId || null,
     invoiceNumber,
+    status: status || "DRAFT",
     dueDate,
     lineItems,
     taxRate: taxRate || 0,
@@ -51,6 +53,7 @@ export const createInvoice = asyncHandler(async (req, res) => {
     recurring,
     subtotal: 0,
     total: 0,
+    paidAt: status === "PAID" ? new Date() : null,
   });
 
   await invoice.save();
@@ -87,7 +90,7 @@ export const getAllInvoices = asyncHandler(async (req, res) => {
       status: "SENT",
       dueDate: { $lt: new Date() },
     },
-    { $set: { status: "OVERDUE" } }
+    { $set: { status: "OVERDUE" } },
   );
 
   const query = { userId: req.user._id };
@@ -135,7 +138,7 @@ export const getInvoiceById = asyncHandler(async (req, res) => {
       status: "SENT",
       dueDate: { $lt: new Date() },
     },
-    { $set: { status: "OVERDUE" } }
+    { $set: { status: "OVERDUE" } },
   );
 
   const invoice = await invoiceModel
@@ -229,6 +232,14 @@ export const updateInvoice = asyncHandler(async (req, res) => {
       invoice[field] = updates[field];
     }
   });
+
+  if (invoice.status === "PAID") {
+    if (!invoice.paidAt) {
+      invoice.paidAt = new Date();
+    }
+  } else {
+    invoice.paidAt = null;
+  }
 
   await invoice.save();
 

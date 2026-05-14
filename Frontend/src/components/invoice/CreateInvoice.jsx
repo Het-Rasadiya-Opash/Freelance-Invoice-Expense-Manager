@@ -31,6 +31,7 @@ const CreateInvoice = ({ open, handleClose, invoiceToEdit, onRefresh }) => {
     projectId: "",
     dueDate: "",
     currency: "INR",
+    status: "DRAFT",
     notes: "",
     terms: "",
     lineItems: [{ description: "", type: "FLAT", quantity: 1, unitPrice: 0 }],
@@ -79,6 +80,7 @@ const CreateInvoice = ({ open, handleClose, invoiceToEdit, onRefresh }) => {
           ? invoiceToEdit.dueDate.substring(0, 10)
           : "",
         currency: invoiceToEdit.currency || "INR",
+        status: invoiceToEdit.status || "DRAFT",
         notes: invoiceToEdit.notes || "",
         terms: invoiceToEdit.terms || "",
         lineItems: invoiceToEdit.lineItems || [
@@ -97,6 +99,7 @@ const CreateInvoice = ({ open, handleClose, invoiceToEdit, onRefresh }) => {
         projectId: "",
         dueDate: "",
         currency: "INR",
+        status: "DRAFT",
         notes: "",
         terms: "",
         lineItems: [
@@ -392,6 +395,33 @@ const CreateInvoice = ({ open, handleClose, invoiceToEdit, onRefresh }) => {
               <MenuItem value="EUR">EUR</MenuItem>
               <MenuItem value="GBP">GBP</MenuItem>
               <MenuItem value="INR">INR</MenuItem>
+            </TextField>
+
+            <TextField
+              required
+              fullWidth
+              id="status"
+              label="Status"
+              name="status"
+              select
+              value={formData.status}
+              onChange={handleChange}
+              variant="outlined"
+              sx={textFieldSx}
+              slotProps={{
+                input: {
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <Description sx={{ color: "#aaa", mr: 1 }} />
+                    </InputAdornment>
+                  ),
+                },
+              }}
+            >
+              <MenuItem value="DRAFT">DRAFT</MenuItem>
+              <MenuItem value="SENT">SENT</MenuItem>
+              <MenuItem value="PAID">PAID</MenuItem>
+              <MenuItem value="OVERDUE">OVERDUE</MenuItem>
             </TextField>
 
             <Box sx={{ gridColumn: "1 / -1", mt: 1 }}>

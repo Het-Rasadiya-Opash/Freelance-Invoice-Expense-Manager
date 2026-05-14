@@ -13,6 +13,7 @@ export const createTimeEntry = asyncHandler(async (req, res) => {
     durationMinutes,
     isManual,
     isRunning,
+    isBilled,
   } = req.body;
 
   if (!projectId) {
@@ -37,6 +38,7 @@ export const createTimeEntry = asyncHandler(async (req, res) => {
     description,
     isManual: isManual || false,
     isRunning: isRunning || false,
+    isBilled: isBilled || false,
   };
 
   if (entryData.isManual) {
@@ -176,7 +178,7 @@ export const getTimeEntryById = asyncHandler(async (req, res) => {
 
 export const updateTimeEntry = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { description, startTime, endTime, durationMinutes, isManual } =
+  const { description, startTime, endTime, durationMinutes, isManual, isBilled } =
     req.body;
 
   const timeEntry = await timeEntryModel.findOne({
@@ -188,9 +190,22 @@ export const updateTimeEntry = asyncHandler(async (req, res) => {
     throw new ApiError(404, "Time entry not found or unauthorized");
   }
 
-  if (timeEntry.isBilled) {
-    throw new ApiError(400, "Cannot edit a billed time entry");
+  const isUnbilling = timeEntry.isBilled && isBilled === false;
+  const isChangingOtherFields =
+    description !== undefined ||
+    startTime !== undefined ||
+    endTime !== undefined ||
+    durationMinutes !== undefined ||
+    isManual !== undefined;
+
+  if (timeEntry.isBilled && !isUnbilling && isChangingOtherFields) {
+    throw new ApiError(
+      400,
+      "Cannot edit a billed time entry's details. Unbill it first.",
+    );
   }
+
+  if (isBilled !== undefined) timeEntry.isBilled = isBilled;
 
   if (description !== undefined) timeEntry.description = description;
   if (isManual !== undefined) timeEntry.isManual = isManual;

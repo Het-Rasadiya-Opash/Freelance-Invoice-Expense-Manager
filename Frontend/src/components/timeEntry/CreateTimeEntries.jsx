@@ -116,6 +116,7 @@ const CreateTimeEntries = ({ open, handleClose, entryToEdit, onRefresh }) => {
           entryToEdit.durationMinutes !== undefined
             ? String(entryToEdit.durationMinutes)
             : "",
+        isBilled: entryToEdit.isBilled || false,
       });
     } else {
       setFormData(defaultForm());
@@ -148,6 +149,7 @@ const CreateTimeEntries = ({ open, handleClose, entryToEdit, onRefresh }) => {
       startTime,
       endTime,
       durationMinutes,
+      isBilled,
     } = formData;
 
     const payload = {
@@ -155,6 +157,7 @@ const CreateTimeEntries = ({ open, handleClose, entryToEdit, onRefresh }) => {
       description,
       isManual,
       isRunning,
+      isBilled,
     };
 
     if (isRunning) {
@@ -396,6 +399,23 @@ const CreateTimeEntries = ({ open, handleClose, entryToEdit, onRefresh }) => {
                     sx={{ fontSize: 14, fontWeight: 600, color: "#333" }}
                   >
                     Manual Entry
+                  </Typography>
+                }
+              />
+              <FormControlLabel
+                control={
+                  <Switch
+                    name="isBilled"
+                    checked={formData.isBilled}
+                    onChange={handleChange}
+                    sx={switchSx}
+                  />
+                }
+                label={
+                  <Typography
+                    sx={{ fontSize: 14, fontWeight: 600, color: "#333" }}
+                  >
+                    {formData.isBilled ? "Billed" : "Unbilled"}
                   </Typography>
                 }
               />

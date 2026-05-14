@@ -11,7 +11,6 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import Navbar from "./components/Navbar";
 
-
 const App = () => {
   const location = useLocation();
 
@@ -33,11 +32,10 @@ const App = () => {
 
   return (
     <div>
-      {!hideNavbar && <Navbar />}
+      {/* {!hideNavbar && <Navbar />} */}
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />
-
         </Route>
 
         <Route path="/login" element={<Login />} />

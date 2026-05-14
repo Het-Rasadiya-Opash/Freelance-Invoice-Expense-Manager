@@ -10,6 +10,7 @@ import projectRouter from "./routes/project.route.js";
 import timeEntryRouter from "./routes/timeEntry.route.js";
 import invoiceRouter from "./routes/invoice.route.js";
 import expenseRouter from "./routes/expense.route.js";
+import dashboardRouter from "./routes/dashboard.route.js";
 
 app.use(
   cors({
@@ -28,6 +29,7 @@ app.use("/api/projects", projectRouter);
 app.use("/api/time-entries", timeEntryRouter);
 app.use("/api/invoices", invoiceRouter);
 app.use("/api/expenses", expenseRouter);
+app.use("/api/dashboard", dashboardRouter);
 
 //error handler
 app.use(errorHandler);
