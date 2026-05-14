@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import invoiceModel from "../models/invoice.model.js";
 import timeEntryModel from "../models/TimeEntry.model.js";
+import { generateInvoicePdf } from "../utils/pdfGenerator.js";
 
 export const createInvoice = asyncHandler(async (req, res) => {
   const {
@@ -273,4 +274,28 @@ export const deleteInvoice = asyncHandler(async (req, res) => {
   return res
     .status(200)
     .json(new ApiResponse(200, null, "Invoice deleted successfully"));
+});
+
+export const getInvoicePdf = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+
+  const invoice = await invoiceModel
+    .findOne({ _id: id, userId: req.user._id })
+    .populate("clientId", "name email company address")
+    .populate("projectId", "name description");
+
+  if (!invoice) {
+    throw new ApiError(404, "Invoice not found");
+  }
+
+  const pdfBuffer = await generateInvoicePdf(invoice);
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    `attachment; filename=invoice-${invoice.invoiceNumber}.pdf`
+  );
+  res.setHeader("Content-Length", pdfBuffer.length);
+
+  return res.end(pdfBuffer);
 });

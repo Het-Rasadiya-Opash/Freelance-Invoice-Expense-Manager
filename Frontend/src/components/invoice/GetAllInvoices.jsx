@@ -12,7 +12,7 @@ import {
   IconButton,
   Chip,
 } from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
+import { Edit, Delete, Download } from "@mui/icons-material";
 import apiRequest from "../../utils/apiRequest";
 
 const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
@@ -27,6 +27,32 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
         console.error("Failed to delete invoice:", error);
         alert("Failed to delete invoice");
       }
+    }
+  };
+
+  const downloadInvoice = async (id) => {
+    try {
+      const response = await apiRequest.get(`/invoices/${id}/pdf`, {
+        responseType: "blob",
+        headers: {
+          Accept: "application/pdf",
+        },
+      });
+
+      const blob = new Blob([response.data], { type: "application/pdf" });
+      const url = window.URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `invoice_${id}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+
+      link.parentNode.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error("Failed to download invoice:", error);
+      alert("Failed to download invoice");
     }
   };
 
@@ -105,7 +131,14 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
               <TableCell sx={{ fontWeight: 700, color: "#555", py: 2 }}>
                 Status
               </TableCell>
-              <TableCell sx={{ fontWeight: 700, color: "#555", py: 2, textAlign: "center" }}>
+              <TableCell
+                sx={{
+                  fontWeight: 700,
+                  color: "#555",
+                  py: 2,
+                  textAlign: "center",
+                }}
+              >
                 Actions
               </TableCell>
             </TableRow>
@@ -146,32 +179,44 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
                     : "N/A"}
                 </TableCell>
                 <TableCell sx={{ py: 2 }}>
-                  <Typography sx={{ fontWeight: 700, color: "#1F2937", fontSize: "0.95rem" }}>
-                    {invoice.currency} {invoice.total !== undefined ? invoice.total.toFixed(2) : "0.00"}
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      color: "#1F2937",
+                      fontSize: "0.95rem",
+                    }}
+                  >
+                    {invoice.currency}{" "}
+                    {invoice.total !== undefined
+                      ? invoice.total.toFixed(2)
+                      : "0.00"}
                   </Typography>
                   {invoice.fxSnapshot && invoice.fxSnapshot.rate && (
                     <Box sx={{ mt: 0.5 }}>
                       <Typography
                         variant="caption"
-                        sx={{ 
-                          color: "#14a800", 
+                        sx={{
+                          color: "#14a800",
                           fontWeight: 600,
                           fontSize: "0.8rem",
                           backgroundColor: "#F0FDF4",
                           px: 1,
                           py: 0.25,
                           borderRadius: "4px",
-                          display: "inline-block"
+                          display: "inline-block",
                         }}
                       >
-                        {invoice.fxSnapshot.targetCurrency} {(invoice.total * invoice.fxSnapshot.rate).toFixed(2)}
+                        {invoice.fxSnapshot.targetCurrency}{" "}
+                        {(invoice.total * invoice.fxSnapshot.rate).toFixed(2)}
                       </Typography>
                       <Typography
                         variant="caption"
                         display="block"
                         sx={{ color: "#9CA3AF", fontSize: "0.7rem", mt: 0.25 }}
                       >
-                        1 {invoice.fxSnapshot.baseCurrency} = {invoice.fxSnapshot.rate} {invoice.fxSnapshot.targetCurrency}
+                        1 {invoice.fxSnapshot.baseCurrency} ={" "}
+                        {invoice.fxSnapshot.rate}{" "}
+                        {invoice.fxSnapshot.targetCurrency}
                       </Typography>
                     </Box>
                   )}
@@ -198,6 +243,9 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
                     aria-label="delete"
                   >
                     <Delete />
+                  </IconButton>
+                  <IconButton onClick={() => downloadInvoice(invoice._id)}>
+                    <Download />
                   </IconButton>
                 </TableCell>
               </TableRow>

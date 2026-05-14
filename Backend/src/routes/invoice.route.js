@@ -6,11 +6,13 @@ import {
   getInvoiceById,
   updateInvoice,
   deleteInvoice,
+  getInvoicePdf,
 } from "../controllers/invoice.controller.js";
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 
 router.get("/", authMiddleware, getAllInvoices);
 router.get("/:id", authMiddleware, getInvoiceById);
+router.get("/:id/pdf", authMiddleware, getInvoicePdf);
 router.post("/create", authMiddleware, createInvoice);
 router.put("/:id", authMiddleware, updateInvoice);
 router.delete("/:id", authMiddleware, deleteInvoice);
