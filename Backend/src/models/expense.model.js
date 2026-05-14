@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 
 const EXPENSE_CATEGORIES = [
-  "software",
-  "hardware",
-  "travel",
-  "meals",
-  "office",
-  "marketing",
-  "utilities",
-  "subcontractor",
-  "other",
+  "SOFTWARE",
+  "HARDWARE",
+  "TRAVEL",
+  "MEALS",
+  "OFFICE",
+  "MARKETING",
+  "UTILITIES",
+  "SUBCONTRACTOR",
+  "OTHER",
 ];
+
 
 const expenseSchema = new mongoose.Schema(
   {
@@ -47,7 +48,7 @@ const expenseSchema = new mongoose.Schema(
     },
     currency: {
       type: String,
-      default: "USD",
+      default: "INR",
       uppercase: true,
       trim: true,
     },

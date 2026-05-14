@@ -81,6 +81,15 @@ export const getAllInvoices = asyncHandler(async (req, res) => {
     sort = "-createdAt",
   } = req.query;
 
+  await invoiceModel.updateMany(
+    {
+      userId: req.user._id,
+      status: "SENT",
+      dueDate: { $lt: new Date() },
+    },
+    { $set: { status: "OVERDUE" } }
+  );
+
   const query = { userId: req.user._id };
 
   if (status) query.status = status;
@@ -118,6 +127,16 @@ export const getAllInvoices = asyncHandler(async (req, res) => {
 
 export const getInvoiceById = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
+  await invoiceModel.updateOne(
+    {
+      _id: id,
+      userId: req.user._id,
+      status: "SENT",
+      dueDate: { $lt: new Date() },
+    },
+    { $set: { status: "OVERDUE" } }
+  );
 
   const invoice = await invoiceModel
     .findOne({ _id: id, userId: req.user._id })
