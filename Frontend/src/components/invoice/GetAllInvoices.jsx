@@ -13,7 +13,7 @@ import {
   Chip,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-import apiRequest from "../utils/apiRequest";
+import apiRequest from "../../utils/apiRequest";
 
 const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
   const handleDelete = async (id) => {

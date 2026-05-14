@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Button, Box, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import CreateProject from "./CreateProject";
-import apiRequest from "../utils/apiRequest";
-import GetAllProjects from "./GetAllProjects";
+import CreateClient from "./CreateClient";
+import apiRequest from "../../utils/apiRequest";
+import GetAllClients from "./GetAllClients";
 
-const Project = () => {
+const Client = () => {
   const [open, setOpen] = useState(false);
-  const [projects, setProjects] = useState([]);
-  const [selectedProject, setSelectedProject] = useState(null);
+  const [clients, setClients] = useState([]);
+  const [selectedClient, setSelectedClient] = useState(null);
 
-  const fetchProjects = async () => {
+  const fetchClients = async () => {
     try {
-      const res = await apiRequest.get("/projects");
-      setProjects(res.data.data);
+      const res = await apiRequest.get("/clients");
+      setClients(res.data.data.clients);
     } catch (error) {
-      console.error("Failed to fetch projects:", error);
+      console.error("Failed to fetch clients:", error);
     }
   };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setSelectedProject(null);
+    setSelectedClient(null);
   };
 
-  const handleEdit = (project) => {
-    setSelectedProject(project);
+  const handleEdit = (client) => {
+    setSelectedClient(client);
     setOpen(true);
   };
 
   useEffect(() => {
-    fetchProjects();
+    fetchClients();
   }, []);
 
   return (
@@ -45,7 +45,7 @@ const Project = () => {
         }}
       >
         {/* <Typography variant="h5" sx={{ fontWeight: 800, color: "#333" }}>
-          Projects
+          Clients
         </Typography> */}
         <Button
           variant="contained"
@@ -62,23 +62,23 @@ const Project = () => {
             },
           }}
         >
-          Create Project
+          Create Client
         </Button>
       </Box>
 
-      <CreateProject
+      <CreateClient
         open={open}
         handleClose={handleClose}
-        projectToEdit={selectedProject}
-        onRefresh={fetchProjects}
+        clientToEdit={selectedClient}
+        onRefresh={fetchClients}
       />
-      <GetAllProjects
-        projects={projects}
+      <GetAllClients
+        clients={clients}
         onEdit={handleEdit}
-        onRefresh={fetchProjects}
+        onRefresh={fetchClients}
       />
     </div>
   );
 };
 
-export default Project;
+export default Client;

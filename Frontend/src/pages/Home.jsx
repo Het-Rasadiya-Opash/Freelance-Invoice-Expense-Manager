@@ -33,10 +33,11 @@ import {
   Logout,
 } from "@mui/icons-material";
 import Dashboard from "../components/Dashboard";
-import Client from "../components/Client";
-import Project from "../components/Project";
-import TimeEntries from "../components/TimeEntries";
-import Invoice from "../components/Invoice";
+import Client from "../components/client/Client";
+import Project from "../components/project/Project";
+import TimeEntries from "../components/timeEntry/TimeEntries";
+import Invoice from "../components/invoice/Invoice";
+import Expense from "../components/expense/Expense";
 
 const Home = () => {
   const { currentUser } = useSelector((state) => state.users);
@@ -56,7 +57,7 @@ const Home = () => {
     };
     fetchInvoiceCount();
 
-    const interval = setInterval(fetchInvoiceCount, 30000); 
+    const interval = setInterval(fetchInvoiceCount, 30000);
     return () => clearInterval(interval);
   }, [activeTab]);
 
@@ -323,6 +324,7 @@ const Home = () => {
           {activeTab === "projects" && <Project />}
           {activeTab === "time_entries" && <TimeEntries />}
           {activeTab === "invoices" && <Invoice />}
+          {activeTab === "expenses" && <Expense />}
         </Box>
       </Box>
     </Box>

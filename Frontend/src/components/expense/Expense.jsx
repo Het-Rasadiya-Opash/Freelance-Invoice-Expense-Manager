@@ -1,37 +1,37 @@
 import React, { useEffect, useState } from "react";
 import { Button, Box } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import apiRequest from "../utils/apiRequest";
-import GetAllInvoices from "./GetAllInvoices";
-import CreateInvoice from "./CreateInvoice";
+import CreateExpense from "./CreateExpense";
+import apiRequest from "../../utils/apiRequest";
+import GetAllExpense from "./GetAllExpense";
 
-const Invoice = () => {
-  const [invoices, setInvoices] = useState([]);
+const Expense = () => {
   const [open, setOpen] = useState(false);
-  const [selectedInvoice, setSelectedInvoice] = useState(null);
+  const [expenses, setExpenses] = useState([]);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
-  const fetchInvoices = async () => {
+  const fetchExpenses = async () => {
     try {
-      const res = await apiRequest.get("/invoices");
-      setInvoices(res.data.data.invoices);
+      const res = await apiRequest.get("/expenses");
+      setExpenses(res.data.data.expenses);
     } catch (error) {
-      console.error("Error fetching invoices:", error);
+      console.error("Failed to fetch expenses:", error);
     }
   };
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
     setOpen(false);
-    setSelectedInvoice(null);
+    setSelectedExpense(null);
   };
 
-  const handleEdit = (invoice) => {
-    setSelectedInvoice(invoice);
+  const handleEdit = (expense) => {
+    setSelectedExpense(expense);
     setOpen(true);
   };
 
   useEffect(() => {
-    fetchInvoices();
+    fetchExpenses();
   }, []);
 
   return (
@@ -59,24 +59,23 @@ const Invoice = () => {
             },
           }}
         >
-          Generate Invoice
+          Add Expense
         </Button>
       </Box>
 
-      <CreateInvoice
+      <CreateExpense
         open={open}
         handleClose={handleClose}
-        invoiceToEdit={selectedInvoice}
-        onRefresh={fetchInvoices}
+        expenseToEdit={selectedExpense}
+        onRefresh={fetchExpenses}
       />
-
-      <GetAllInvoices
-        invoices={invoices}
-        fetchInvoices={fetchInvoices}
+      <GetAllExpense
+        expenses={expenses}
         onEdit={handleEdit}
+        onRefresh={fetchExpenses}
       />
     </div>
   );
 };
 
-export default Invoice;
+export default Expense;

@@ -15,7 +15,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Edit, Delete, Timer, EditNote, StopCircle } from "@mui/icons-material";
-import apiRequest from "../utils/apiRequest";
+import apiRequest from "../../utils/apiRequest";
 
 const formatDuration = (minutes) => {
   if (minutes == null || minutes === 0) return "—";

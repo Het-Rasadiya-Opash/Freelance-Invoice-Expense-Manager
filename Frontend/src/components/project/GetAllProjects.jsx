@@ -12,7 +12,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-import apiRequest from "../utils/apiRequest";
+import apiRequest from "../../utils/apiRequest";
 
 const GetAllProjects = ({ projects, onEdit, onRefresh }) => {
   const handleDelete = async (id) => {
@@ -82,7 +82,14 @@ const GetAllProjects = ({ projects, onEdit, onRefresh }) => {
               <TableCell sx={{ fontWeight: 700, color: "#555", py: 2 }}>
                 Status
               </TableCell>
-              <TableCell sx={{ fontWeight: 700, color: "#555", py: 2, textAlign: "center" }}>
+              <TableCell
+                sx={{
+                  fontWeight: 700,
+                  color: "#555",
+                  py: 2,
+                  textAlign: "center",
+                }}
+              >
                 Actions
               </TableCell>
             </TableRow>

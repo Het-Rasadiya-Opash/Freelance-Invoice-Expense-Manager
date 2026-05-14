@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import apiRequest from "../utils/apiRequest";
+import apiRequest from "../../utils/apiRequest";
 import {
   Box,
   Button,

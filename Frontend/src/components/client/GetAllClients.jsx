@@ -12,7 +12,7 @@ import {
   IconButton,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
-import apiRequest from "../utils/apiRequest";
+import apiRequest from "../../utils/apiRequest";
 
 const GetAllClients = ({ clients, onEdit, onRefresh }) => {
   const handleDelete = async (id) => {

@@ -11,7 +11,7 @@ import {
 import { Add, Search, FilterList, Close } from "@mui/icons-material";
 import CreateTimeEntries from "./CreateTimeEntries";
 import GetAllTimeEntries from "./GetAllTimeEntries";
-import apiRequest from "../utils/apiRequest";
+import apiRequest from "../../utils/apiRequest";
 
 const filterInputSx = {
   "& .MuiOutlinedInput-root": {
