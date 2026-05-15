@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import apiRequest from "./utils/apiRequest";
 import { useDispatch } from "react-redux";
+import { Toaster } from "react-hot-toast";
 import { setCheckingAuth, setCurrentUser } from "./features/usersSlice";
 import { Route, Routes, useLocation } from "react-router";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -20,7 +21,7 @@ const App = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await apiRequest.get("/users");
+        const response = await apiRequest.get("/users", { skipToast: true });
         const user = response.data.data;
         dispatch(setCurrentUser(user));
       } catch (err) {
@@ -32,6 +33,7 @@ const App = () => {
 
   return (
     <div>
+      <Toaster position="top-right" reverseOrder={false} />
       {/* {!hideNavbar && <Navbar />} */}
       <Routes>
         <Route element={<ProtectedRoute />}>
