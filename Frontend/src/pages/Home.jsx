@@ -1,43 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
-import { logout } from "../features/usersSlice";
-import apiRequest from "../utils/apiRequest";
+import {
+  AccessTime,
+  AccountBalanceWallet,
+  Dashboard as DashboardIcon,
+  Description,
+  Groups,
+  Logout,
+  ReceiptLong
+} from "@mui/icons-material";
 import {
   Avatar,
   Box,
   Button,
   IconButton,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-  Divider,
+  Typography
 } from "@mui/material";
-import {
-  AccountBalanceWallet,
-  Add,
-  Business,
-  Dashboard as DashboardIcon,
-  Email,
-  Groups,
-  HomeWork,
-  NotificationsNone,
-  Person,
-  ReceiptLong,
-  TrendingUp,
-  Description,
-  AccessTime,
-  Settings,
-  Assessment,
-  Logout,
-} from "@mui/icons-material";
-import Dashboard from "../components/dashboard/Dashboard";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router";
 import Client from "../components/client/Client";
+import Dashboard from "../components/dashboard/Dashboard";
+import Expense from "../components/expense/Expense";
+import Invoice from "../components/invoice/Invoice";
 import Project from "../components/project/Project";
 import TimeEntries from "../components/timeEntry/TimeEntries";
-import Invoice from "../components/invoice/Invoice";
-import Expense from "../components/expense/Expense";
+import { logout } from "../features/usersSlice";
+import apiRequest from "../utils/apiRequest";
 
 const Home = () => {
   const { currentUser } = useSelector((state) => state.users);
@@ -81,7 +68,6 @@ const Home = () => {
       items: [
         { key: "time_entries", label: "Time Entries", icon: <AccessTime /> },
         { key: "expenses", label: "Expenses", icon: <AccountBalanceWallet /> },
-        { key: "reports", label: "Reports", icon: <Assessment /> },
       ],
     },
   ];

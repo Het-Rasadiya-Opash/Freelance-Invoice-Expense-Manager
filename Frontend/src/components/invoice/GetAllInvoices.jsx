@@ -206,8 +206,12 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
                           display: "inline-block",
                         }}
                       >
-                        {invoice.fxSnapshot.targetCurrency}{" "}
-                        {(invoice.total * invoice.fxSnapshot.rate).toFixed(2)}
+                        {invoice.currency === invoice.fxSnapshot.baseCurrency
+                          ? invoice.fxSnapshot.targetCurrency
+                          : invoice.fxSnapshot.baseCurrency}{" "}
+                        {invoice.currency === invoice.fxSnapshot.baseCurrency
+                          ? (invoice.total * invoice.fxSnapshot.rate).toFixed(2)
+                          : (invoice.total / invoice.fxSnapshot.rate).toFixed(2)}
                       </Typography>
                       <Typography
                         variant="caption"
@@ -229,24 +233,33 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
                     sx={{ fontWeight: 600, fontSize: "0.75rem" }}
                   />
                 </TableCell>
-                <TableCell sx={{ py: 2, textAlign: "center" }}>
-                  <IconButton
-                    onClick={() => onEdit && onEdit(invoice)}
-                    sx={{ color: "#14a800", mr: 1 }}
-                    aria-label="edit"
-                  >
-                    <Edit />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => handleDelete(invoice._id)}
-                    sx={{ color: "#d32f2f" }}
-                    aria-label="delete"
-                  >
-                    <Delete />
-                  </IconButton>
-                  <IconButton onClick={() => downloadInvoice(invoice._id)}>
-                    <Download />
-                  </IconButton>
+                <TableCell sx={{ py: 2 }}>
+                  <Box sx={{ display: "flex", justifyContent: "center", gap: 0.5 }}>
+                    <IconButton
+                      onClick={() => onEdit && onEdit(invoice)}
+                      sx={{ color: "#14a800" }}
+                      aria-label="edit"
+                      size="small"
+                    >
+                      <Edit fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDelete(invoice._id)}
+                      sx={{ color: "#d32f2f" }}
+                      aria-label="delete"
+                      size="small"
+                    >
+                      <Delete fontSize="small" />
+                    </IconButton>
+                    <IconButton 
+                      onClick={() => downloadInvoice(invoice._id)}
+                      sx={{ color: "#555" }}
+                      aria-label="download"
+                      size="small"
+                    >
+                      <Download fontSize="small" />
+                    </IconButton>
+                  </Box>
                 </TableCell>
               </TableRow>
             ))}

@@ -17,9 +17,20 @@ export const getDashboardSummary = asyncHandler(async (req, res) => {
       },
     },
     {
+      $addFields: {
+        totalInBase: {
+          $cond: {
+            if: { $eq: ["$currency", "$fxSnapshot.targetCurrency"] },
+            then: { $divide: ["$total", { $ifNull: ["$fxSnapshot.rate", 1] }] },
+            else: "$total"
+          }
+        }
+      }
+    },
+    {
       $group: {
         _id: null,
-        total: { $sum: "$total" },
+        total: { $sum: "$totalInBase" },
       },
     },
   ]);
@@ -38,9 +49,20 @@ export const getDashboardSummary = asyncHandler(async (req, res) => {
       },
     },
     {
+      $addFields: {
+        totalInBase: {
+          $cond: {
+            if: { $eq: ["$currency", "$fxSnapshot.targetCurrency"] },
+            then: { $divide: ["$total", { $ifNull: ["$fxSnapshot.rate", 1] }] },
+            else: "$total"
+          }
+        }
+      }
+    },
+    {
       $group: {
         _id: null,
-        total: { $sum: "$total" },
+        total: { $sum: "$totalInBase" },
       },
     },
   ]);
@@ -54,9 +76,20 @@ export const getDashboardSummary = asyncHandler(async (req, res) => {
       },
     },
     {
+      $addFields: {
+        totalInBase: {
+          $cond: {
+            if: { $eq: ["$currency", "$fxSnapshot.targetCurrency"] },
+            then: { $divide: ["$total", { $ifNull: ["$fxSnapshot.rate", 1] }] },
+            else: "$total"
+          }
+        }
+      }
+    },
+    {
       $group: {
         _id: "$clientId",
-        revenue: { $sum: "$total" },
+        revenue: { $sum: "$totalInBase" },
       },
     },
     { $sort: { revenue: -1 } },
