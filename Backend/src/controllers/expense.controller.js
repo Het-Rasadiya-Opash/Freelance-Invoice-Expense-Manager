@@ -57,6 +57,8 @@ export const getExpenses = asyncHandler(async (req, res) => {
     clientId,
     projectId,
     date,
+    startDate,
+    endDate,
     page = 1,
     limit = 10,
     sort = "-date",
@@ -68,7 +70,13 @@ export const getExpenses = asyncHandler(async (req, res) => {
   if (clientId) query.clientId = clientId;
   if (projectId) query.projectId = projectId;
 
-  if (date) query.date = date;
+  if (date) {
+    query.date = date;
+  } else if (startDate || endDate) {
+    query.date = {};
+    if (startDate) query.date.$gte = new Date(startDate);
+    if (endDate) query.date.$lte = new Date(endDate);
+  }
 
   const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 

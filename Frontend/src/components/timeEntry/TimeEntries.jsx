@@ -8,7 +8,7 @@ import {
   InputAdornment,
   Chip,
 } from "@mui/material";
-import { Add, Search, FilterList, Close } from "@mui/icons-material";
+import { Add, Search, FilterList, Close, Download } from "@mui/icons-material";
 import CreateTimeEntries from "./CreateTimeEntries";
 import GetAllTimeEntries from "./GetAllTimeEntries";
 import apiRequest from "../../utils/apiRequest";
@@ -34,6 +34,8 @@ const TimeEntries = () => {
   const [filterClientId, setFilterClientId] = useState("");
   const [filterBilled, setFilterBilled] = useState("");
   const [filterRunning, setFilterRunning] = useState("");
+  const [filterStartDate, setFilterStartDate] = useState("");
+  const [filterEndDate, setFilterEndDate] = useState("");
 
   const [filteredEntries, setFilteredEntries] = useState([]);
 
@@ -60,13 +62,15 @@ const TimeEntries = () => {
       if (filterClientId) params.clientId = filterClientId;
       if (filterBilled !== "") params.isBilled = filterBilled;
       if (filterRunning !== "") params.isRunning = filterRunning;
+      if (filterStartDate) params.startDate = filterStartDate;
+      if (filterEndDate) params.endDate = filterEndDate;
 
       const res = await apiRequest.get("/time-entries", { params });
       setTimeEntries(res.data.data?.timeEntries || []);
     } catch (error) {
       console.error("Failed to fetch time entries:", error);
     }
-  }, [filterProjectId, filterClientId, filterBilled, filterRunning]);
+  }, [filterProjectId, filterClientId, filterBilled, filterRunning, filterStartDate, filterEndDate]);
 
   useEffect(() => {
     fetchTimeEntries();
@@ -101,12 +105,62 @@ const TimeEntries = () => {
     setOpen(true);
   };
 
+  const handleExportCSV = async () => {
+    try {
+      const params = {
+        limit: 10000,
+      };
+      if (filterProjectId) params.projectId = filterProjectId;
+      if (filterClientId) params.clientId = filterClientId;
+      if (filterBilled !== "") params.isBilled = filterBilled;
+      if (filterRunning !== "") params.isRunning = filterRunning;
+      if (filterStartDate) params.startDate = filterStartDate;
+      if (filterEndDate) params.endDate = filterEndDate;
+
+      const res = await apiRequest.get("/time-entries", { params });
+      const entries = res.data.data?.timeEntries || [];
+
+      const headers = ['Description', 'Project', 'Client', 'Duration (Mins)', 'Start Time', 'End Time', 'Billed'];
+      
+      const csvContent = [
+        headers.join(','),
+        ...entries.map(entry => {
+          const row = [
+            `"${(entry.description || '').replace(/"/g, '""')}"`,
+            `"${(entry.projectId?.name || '').replace(/"/g, '""')}"`,
+            `"${(entry.clientId?.name || entry.clientId?.company || '').replace(/"/g, '""')}"`,
+            entry.durationMinutes || 0,
+            `"${new Date(entry.startTime).toLocaleString()}"`,
+            entry.endTime ? `"${new Date(entry.endTime).toLocaleString()}"` : '""',
+            entry.isBilled ? '"Yes"' : '"No"'
+          ];
+          return row.join(',');
+        })
+      ].join('\r\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `time_entries_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("Failed to export CSV:", error);
+      alert("Failed to export CSV");
+    }
+  };
+
   const clearFilters = () => {
     setSearch("");
     setFilterProjectId("");
     setFilterClientId("");
     setFilterBilled("");
     setFilterRunning("");
+    setFilterStartDate("");
+    setFilterEndDate("");
   };
 
   const hasActiveFilters =
@@ -132,6 +186,24 @@ const TimeEntries = () => {
         {/* <Typography variant="h5" sx={{ fontWeight: 800, color: "#333" }}>
           Time Entries
         </Typography> */}
+        <Button
+          variant="outlined"
+          startIcon={<Download />}
+          onClick={handleExportCSV}
+          sx={{
+            borderColor: "#14a800",
+            color: "#14a800",
+            textTransform: "none",
+            fontWeight: 600,
+            borderRadius: "8px",
+            "&:hover": { 
+              borderColor: "#108a00",
+              backgroundColor: "#F0FDF4"
+            },
+          }}
+        >
+          Export CSV
+        </Button>
         <Button
           variant="contained"
           startIcon={<Add />}
@@ -204,6 +276,44 @@ const TimeEntries = () => {
                   <Search sx={{ color: "#999", fontSize: 18 }} />
                 </InputAdornment>
               ),
+            }}
+          />
+
+          <TextField
+            label="Start Date"
+            type="date"
+            value={filterStartDate}
+            onChange={(e) => setFilterStartDate(e.target.value)}
+            size="small"
+            sx={{
+              ...filterInputSx,
+              flex: "1 1 150px",
+              minWidth: 140,
+              "& input::-webkit-datetime-edit": {
+                color: filterStartDate ? "inherit" : "transparent",
+              },
+              "& input:focus::-webkit-datetime-edit": {
+                color: "inherit",
+              },
+            }}
+          />
+
+          <TextField
+            label="End Date"
+            type="date"
+            value={filterEndDate}
+            onChange={(e) => setFilterEndDate(e.target.value)}
+            size="small"
+            sx={{
+              ...filterInputSx,
+              flex: "1 1 150px",
+              minWidth: 140,
+              "& input::-webkit-datetime-edit": {
+                color: filterEndDate ? "inherit" : "transparent",
+              },
+              "& input:focus::-webkit-datetime-edit": {
+                color: "inherit",
+              },
             }}
           />
 

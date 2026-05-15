@@ -80,6 +80,8 @@ export const getAllInvoices = asyncHandler(async (req, res) => {
     status,
     clientId,
     projectId,
+    startDate,
+    endDate,
     page = 1,
     limit = 10,
     sort = "-createdAt",
@@ -99,6 +101,12 @@ export const getAllInvoices = asyncHandler(async (req, res) => {
   if (status) query.status = status;
   if (clientId) query.clientId = clientId;
   if (projectId) query.projectId = projectId;
+
+  if (startDate || endDate) {
+    query.createdAt = {};
+    if (startDate) query.createdAt.$gte = new Date(startDate);
+    if (endDate) query.createdAt.$lte = new Date(endDate);
+  }
 
   const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
 
