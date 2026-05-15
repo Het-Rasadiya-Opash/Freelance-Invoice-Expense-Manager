@@ -1,19 +1,18 @@
-import React from "react";
+import { Delete, Edit, Visibility } from "@mui/icons-material";
 import {
+  Box,
+  Chip,
+  IconButton,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Typography,
-  Box,
-  IconButton,
-  Chip,
   Tooltip,
+  Typography,
 } from "@mui/material";
-import { Edit, Delete, Visibility } from "@mui/icons-material";
 import apiRequest from "../../utils/apiRequest";
 import TableSkeleton from "../common/TableSkeleton";
 

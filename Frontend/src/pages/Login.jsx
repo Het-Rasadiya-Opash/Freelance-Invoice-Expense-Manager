@@ -1,15 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link as RouterLink } from "react-router";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
-  clearError,
-  setCurrentUser,
-  setError,
-  setLoading,
-} from "../features/usersSlice";
-import apiRequest from "../utils/apiRequest";
-import {
-  Avatar,
   Box,
   Button,
   Container,
@@ -18,9 +8,18 @@ import {
   Link,
   Paper,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import { LockOutlined, Visibility, VisibilityOff } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink, useNavigate } from "react-router";
+import {
+  clearError,
+  setCurrentUser,
+  setError,
+  setLoading,
+} from "../features/usersSlice";
+import apiRequest from "../utils/apiRequest";
 
 const Login = () => {
   const [formData, setFormData] = useState({

@@ -1,18 +1,17 @@
-import React, { useState } from "react";
-import { useNavigate, useParams, Link as RouterLink } from "react-router";
-import apiRequest from "../utils/apiRequest";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Box,
   Button,
   Container,
   IconButton,
   InputAdornment,
-  Link,
   Paper,
   TextField,
-  Typography,
+  Typography
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import apiRequest from "../utils/apiRequest";
 
 const ResetPassword = () => {
   const { token } = useParams();

@@ -1,6 +1,3 @@
-import React, { useState } from "react";
-import { Link as RouterLink } from "react-router";
-import apiRequest from "../utils/apiRequest";
 import {
   Box,
   Button,
@@ -10,6 +7,9 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
+import { Link as RouterLink } from "react-router";
+import apiRequest from "../utils/apiRequest";
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");

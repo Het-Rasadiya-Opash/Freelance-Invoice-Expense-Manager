@@ -1,14 +1,13 @@
-import React from "react";
 import {
+  Box,
+  Paper,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Box,
-  Skeleton,
 } from "@mui/material";
 
 const TableSkeleton = ({ columns, rowCount = 5 }) => {

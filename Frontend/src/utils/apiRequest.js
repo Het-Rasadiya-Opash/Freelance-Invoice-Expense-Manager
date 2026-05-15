@@ -1,7 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
-import { store } from "../store";
 import { logout } from "../features/usersSlice";
+import { store } from "../store";
 
 const apiRequest = axios.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT,

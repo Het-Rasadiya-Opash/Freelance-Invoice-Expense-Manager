@@ -1,25 +1,25 @@
-import React, { useState, useEffect } from "react";
-import apiRequest from "../../utils/apiRequest";
+import {
+  Assignment,
+  Close as CloseIcon,
+  CurrencyExchange,
+  Description,
+  Person,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  InputAdornment,
+  MenuItem,
   TextField,
   Typography,
-  MenuItem,
-  InputAdornment,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  IconButton,
 } from "@mui/material";
-import {
-  Assignment,
-  Description,
-  Person,
-  CurrencyExchange,
-  Close as CloseIcon,
-} from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import apiRequest from "../../utils/apiRequest";
 
 const CreateProject = ({ open, handleClose, projectToEdit, onRefresh }) => {
   const [formData, setFormData] = useState({

@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Link as RouterLink } from "react-router";
 import {
-  clearError,
-  setCurrentUser,
-  setError,
-  setLoading,
-} from "../features/usersSlice";
-import apiRequest from "../utils/apiRequest";
+  ArrowForward,
+  CloudUpload,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
 import {
   Avatar,
   Box,
@@ -21,12 +17,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link as RouterLink, useNavigate } from "react-router";
 import {
-  ArrowForward,
-  CloudUpload,
-  Visibility,
-  VisibilityOff,
-} from "@mui/icons-material";
+  clearError,
+  setCurrentUser,
+  setError,
+  setLoading,
+} from "../features/usersSlice";
+import apiRequest from "../utils/apiRequest";
 
 const currencies = [
   { value: "USD", label: "$ (USD)" },

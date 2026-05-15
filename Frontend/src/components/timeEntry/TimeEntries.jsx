@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useCallback } from "react";
+import { Add, Close, Download, FilterList, Search } from "@mui/icons-material";
 import {
-  Button,
   Box,
-  Typography,
-  TextField,
-  MenuItem,
-  InputAdornment,
+  Button,
   Chip,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  Typography,
 } from "@mui/material";
-import { Add, Search, FilterList, Close, Download } from "@mui/icons-material";
+import { useCallback, useEffect, useState } from "react";
+import apiRequest from "../../utils/apiRequest";
 import CreateTimeEntries from "./CreateTimeEntries";
 import GetAllTimeEntries from "./GetAllTimeEntries";
-import apiRequest from "../../utils/apiRequest";
 
 const filterInputSx = {
   "& .MuiOutlinedInput-root": {

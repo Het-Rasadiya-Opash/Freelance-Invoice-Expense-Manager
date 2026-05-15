@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import { Button, Box, Typography } from "@mui/material";
 import { Add } from "@mui/icons-material";
-import CreateClient from "./CreateClient";
+import { Box, Button } from "@mui/material";
+import { useEffect, useState } from "react";
 import apiRequest from "../../utils/apiRequest";
+import CreateClient from "./CreateClient";
 import GetAllClients from "./GetAllClients";
 
 const Client = () => {
