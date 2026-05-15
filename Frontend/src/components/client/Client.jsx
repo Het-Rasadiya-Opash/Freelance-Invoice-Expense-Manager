@@ -9,13 +9,17 @@ const Client = () => {
   const [open, setOpen] = useState(false);
   const [clients, setClients] = useState([]);
   const [selectedClient, setSelectedClient] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   const fetchClients = async () => {
+    setLoading(true);
     try {
       const res = await apiRequest.get("/clients");
       setClients(res.data.data.clients);
     } catch (error) {
       console.error("Failed to fetch clients:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -74,6 +78,7 @@ const Client = () => {
       />
       <GetAllClients
         clients={clients}
+        loading={loading}
         onEdit={handleEdit}
         onRefresh={fetchClients}
       />

@@ -1,16 +1,15 @@
-import React, { useEffect } from "react";
-import apiRequest from "./utils/apiRequest";
-import { useDispatch } from "react-redux";
+import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
-import { setCheckingAuth, setCurrentUser } from "./features/usersSlice";
+import { useDispatch } from "react-redux";
 import { Route, Routes, useLocation } from "react-router";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
-import Register from "./pages/Register";
+import ProtectedRoute from "./components/common/ProtectedRoute";
+import { setCheckingAuth, setCurrentUser } from "./features/usersSlice";
 import ForgotPassword from "./pages/ForgotPassword";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import ResetPassword from "./pages/ResetPassword";
-import Navbar from "./components/Navbar";
+import apiRequest from "./utils/apiRequest";
 
 const App = () => {
   const location = useLocation();
@@ -22,7 +21,7 @@ const App = () => {
     const checkAuth = async () => {
       try {
         const response = await apiRequest.get("/users", { skipToast: true });
-        const user = response.data.data;
+        const user = response.data.data.user;
         dispatch(setCurrentUser(user));
       } catch (err) {
         dispatch(setCheckingAuth(false));
@@ -34,7 +33,7 @@ const App = () => {
   return (
     <div>
       <Toaster position="top-right" reverseOrder={false} />
-      {/* {!hideNavbar && <Navbar />} */}
+
       <Routes>
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<Home />} />

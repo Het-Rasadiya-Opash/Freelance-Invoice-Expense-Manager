@@ -27,6 +27,7 @@ const Invoice = () => {
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [filterStatus, setFilterStatus] = useState("");
   const [filterClientId, setFilterClientId] = useState("");
@@ -49,6 +50,7 @@ const Invoice = () => {
   }, []);
 
   const fetchInvoices = useCallback(async () => {
+    setLoading(true);
     try {
       const params = { limit: 100 };
       if (filterStatus) params.status = filterStatus;
@@ -61,6 +63,8 @@ const Invoice = () => {
       setInvoices(res.data.data.invoices);
     } catch (error) {
       console.error("Error fetching invoices:", error);
+    } finally {
+      setLoading(false);
     }
   }, [
     filterStatus,
@@ -340,6 +344,7 @@ const Invoice = () => {
 
       <GetAllInvoices
         invoices={invoices}
+        loading={loading}
         fetchInvoices={fetchInvoices}
         onEdit={handleEdit}
       />

@@ -3,6 +3,8 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import invoiceModel from "../models/invoice.model.js";
 import timeEntryModel from "../models/TimeEntry.model.js";
+import clientModel from "../models/client.model.js";
+import projectModel from "../models/project.model.js";
 import { generateInvoicePdf } from "../utils/pdfGenerator.js";
 
 export const createInvoice = asyncHandler(async (req, res) => {
@@ -24,6 +26,24 @@ export const createInvoice = asyncHandler(async (req, res) => {
 
   if (!clientId || !dueDate || !lineItems || lineItems.length === 0) {
     throw new ApiError(400, "Client, due date, and line items are required");
+  }
+
+  const client = await clientModel.findOne({
+    _id: clientId,
+    userId: req.user._id,
+  });
+  if (!client) {
+    throw new ApiError(404, "Client not found or unauthorized");
+  }
+
+  if (projectId) {
+    const project = await projectModel.findOne({
+      _id: projectId,
+      userId: req.user._id,
+    });
+    if (!project) {
+      throw new ApiError(404, "Project not found or unauthorized");
+    }
   }
 
   if (invoiceNumber) {
@@ -172,6 +192,26 @@ export const updateInvoice = asyncHandler(async (req, res) => {
 
   if (!invoice) {
     throw new ApiError(404, "Invoice not found");
+  }
+
+  if (updates.clientId) {
+    const client = await clientModel.findOne({
+      _id: updates.clientId,
+      userId: req.user._id,
+    });
+    if (!client) {
+      throw new ApiError(404, "Client not found or unauthorized");
+    }
+  }
+
+  if (updates.projectId) {
+    const project = await projectModel.findOne({
+      _id: updates.projectId,
+      userId: req.user._id,
+    });
+    if (!project) {
+      throw new ApiError(404, "Project not found or unauthorized");
+    }
   }
 
   if (

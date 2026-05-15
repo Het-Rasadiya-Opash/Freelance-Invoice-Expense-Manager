@@ -10,13 +10,17 @@ const Project = () => {
   const [open, setOpen] = useState(false);
   const [projects, setProjects] = useState([]);
   const [selectedProject, setSelectedProject] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const fetchProjects = async () => {
+    setLoading(true);
     try {
       const res = await apiRequest.get("/projects");
       setProjects(res.data.data);
     } catch (error) {
       console.error("Failed to fetch projects:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -77,6 +81,7 @@ const Project = () => {
         projects={projects}
         onEdit={handleEdit}
         onRefresh={fetchProjects}
+        loading={loading}
       />
     </div>
   );

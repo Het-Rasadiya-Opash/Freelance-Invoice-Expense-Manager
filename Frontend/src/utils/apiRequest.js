@@ -1,5 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
+import { store } from "../store";
+import { logout } from "../features/usersSlice";
 
 const apiRequest = axios.create({
   baseURL: import.meta.env.VITE_API_ENDPOINT,
@@ -25,6 +27,10 @@ apiRequest.interceptors.response.use(
 
     if (error.response?.data?.errors) {
       console.error("Validation errors:", error.response.data.errors);
+    }
+
+    if (error.response?.status === 401) {
+      store.dispatch(logout());
     }
 
     return Promise.reject(error);

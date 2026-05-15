@@ -10,11 +10,13 @@ import {
   Typography,
   Box,
   IconButton,
+  Skeleton,
 } from "@mui/material";
 import { Edit, Delete } from "@mui/icons-material";
 import apiRequest from "../../utils/apiRequest";
+import TableSkeleton from "../common/TableSkeleton";
 
-const GetAllClients = ({ clients, onEdit, onRefresh }) => {
+const GetAllClients = ({ clients, loading, onEdit, onRefresh }) => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this client?")) {
       try {
@@ -26,6 +28,14 @@ const GetAllClients = ({ clients, onEdit, onRefresh }) => {
       }
     }
   };
+
+  if (loading) {
+    return (
+      <TableSkeleton
+        columns={["Client Name", "Email", "Company", "Currency", "Location", "Actions"]}
+      />
+    );
+  }
 
   if (!clients || clients.length === 0) {
     return (

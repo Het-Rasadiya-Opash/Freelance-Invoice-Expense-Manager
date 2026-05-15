@@ -11,11 +11,13 @@ import {
   Box,
   IconButton,
   Chip,
+  Skeleton,
 } from "@mui/material";
 import { Edit, Delete, Download } from "@mui/icons-material";
 import apiRequest from "../../utils/apiRequest";
+import TableSkeleton from "../common/TableSkeleton";
 
-const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
+const GetAllInvoices = ({ invoices, loading, fetchInvoices, onEdit }) => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this invoice?")) {
       try {
@@ -70,6 +72,14 @@ const GetAllInvoices = ({ invoices, fetchInvoices, onEdit }) => {
         return "default";
     }
   };
+
+  if (loading) {
+    return (
+      <TableSkeleton
+        columns={["Invoice #", "Client", "Project", "Issue Date", "Due Date", "Amount", "Status", "Actions"]}
+      />
+    );
+  }
 
   if (!invoices || invoices.length === 0) {
     return (

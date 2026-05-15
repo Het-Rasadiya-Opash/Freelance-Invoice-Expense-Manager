@@ -49,7 +49,7 @@ export const getProjectById = asyncHandler(async (req, res) => {
   const { id } = req.params;
 
   const project = await projectModel
-    .findById(id)
+    .findOne({ _id: id, userId: req.user._id })
     .populate("clientId", "name email company");
 
   if (!project) {
@@ -65,6 +65,16 @@ export const updateProject = asyncHandler(async (req, res) => {
   const { id } = req.params;
   const { name, description, clientId, hourlyRate, currency, status } =
     req.body;
+
+  if (clientId) {
+    const client = await clientModel.findOne({
+      _id: clientId,
+      userId: req.user._id,
+    });
+    if (!client) {
+      throw new ApiError(404, "Client not found or unauthorized");
+    }
+  }
 
   const project = await projectModel.findOneAndUpdate(
     { _id: id, userId: req.user._id },

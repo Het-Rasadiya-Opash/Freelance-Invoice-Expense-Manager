@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { Edit, Delete, Timer, EditNote, StopCircle } from "@mui/icons-material";
 import apiRequest from "../../utils/apiRequest";
+import TableSkeleton from "../common/TableSkeleton";
 
 const formatDuration = (minutes) => {
   if (minutes == null || minutes === 0) return "—";
@@ -34,7 +35,7 @@ const formatDateTime = (dateStr) => {
   });
 };
 
-const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
+const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh, loading }) => {
   const [stoppingId, setStoppingId] = useState(null);
 
   const handleStop = async (id) => {
@@ -61,6 +62,24 @@ const GetAllTimeEntries = ({ timeEntries, onEdit, onRefresh }) => {
       }
     }
   };
+
+  if (loading) {
+    return (
+      <TableSkeleton
+        columns={[
+          "Project",
+          "Client",
+          "Description",
+          "Start",
+          "End",
+          "Duration",
+          "Type",
+          "Status",
+          "Actions",
+        ]}
+      />
+    );
+  }
 
   if (!timeEntries || timeEntries.length === 0) {
     return (

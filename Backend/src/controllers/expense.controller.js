@@ -2,6 +2,8 @@ import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import expenseModel from "../models/expense.model.js";
+import clientModel from "../models/client.model.js";
+import projectModel from "../models/project.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const createExpense = asyncHandler(async (req, res) => {
@@ -19,6 +21,20 @@ export const createExpense = asyncHandler(async (req, res) => {
 
   if (!description || !category || !amount) {
     throw new ApiError(400, "Description, category, and amount are required");
+  }
+
+  if (clientId) {
+    const client = await clientModel.findOne({ _id: clientId, userId: req.user._id });
+    if (!client) {
+      throw new ApiError(404, "Client not found or unauthorized");
+    }
+  }
+
+  if (projectId) {
+    const project = await projectModel.findOne({ _id: projectId, userId: req.user._id });
+    if (!project) {
+      throw new ApiError(404, "Project not found or unauthorized");
+    }
   }
 
   const expenseData = {
@@ -141,6 +157,20 @@ export const updateExpense = asyncHandler(async (req, res) => {
 
   if (!expense) {
     throw new ApiError(404, "Expense not found");
+  }
+
+  if (clientId) {
+    const client = await clientModel.findOne({ _id: clientId, userId: req.user._id });
+    if (!client) {
+      throw new ApiError(404, "Client not found or unauthorized");
+    }
+  }
+
+  if (projectId) {
+    const project = await projectModel.findOne({ _id: projectId, userId: req.user._id });
+    if (!project) {
+      throw new ApiError(404, "Project not found or unauthorized");
+    }
   }
 
   const updateData = {

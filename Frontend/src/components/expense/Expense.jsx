@@ -25,6 +25,7 @@ const Expense = () => {
   const [open, setOpen] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [selectedExpense, setSelectedExpense] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
 
@@ -49,6 +50,7 @@ const Expense = () => {
   }, []);
 
   const fetchExpenses = useCallback(async () => {
+    setLoading(true);
     try {
       const params = { limit: 100 };
       if (filterCategory) params.category = filterCategory;
@@ -61,6 +63,8 @@ const Expense = () => {
       setExpenses(res.data.data.expenses);
     } catch (error) {
       console.error("Failed to fetch expenses:", error);
+    } finally {
+      setLoading(false);
     }
   }, [
     filterCategory,
@@ -332,6 +336,7 @@ const Expense = () => {
         expenses={expenses}
         onEdit={handleEdit}
         onRefresh={fetchExpenses}
+        loading={loading}
       />
     </div>
   );

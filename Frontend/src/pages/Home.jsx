@@ -5,15 +5,9 @@ import {
   Description,
   Groups,
   Logout,
-  ReceiptLong
+  ReceiptLong,
 } from "@mui/icons-material";
-import {
-  Avatar,
-  Box,
-  Button,
-  IconButton,
-  Typography
-} from "@mui/material";
+import { Avatar, Box, Button, IconButton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router";
@@ -32,6 +26,8 @@ const Home = () => {
   const [invoiceCount, setInvoiceCount] = useState(0);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  console.log(currentUser);
 
   useEffect(() => {
     const fetchInvoiceCount = async () => {
@@ -113,62 +109,6 @@ const Home = () => {
           <Typography sx={{ color: "#1F2937", fontSize: 32, fontWeight: 800 }}>
             Freelance
           </Typography>
-        </Box>
-
-        <Box sx={{ mb: 3, px: 2 }}>
-          {currentUser && (
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
-              <Avatar
-                alt={currentUser.name}
-                src={currentUser.avatar}
-                sx={{ bgcolor: "#14a800", width: 36, height: 36 }}
-              >
-                {currentUser.name ? currentUser.name[0].toUpperCase() : "U"}
-              </Avatar>
-              <Box
-                sx={{
-                  flex: 1,
-                  minWidth: 0,
-                  display: { xs: "none", md: "block" },
-                }}
-              >
-                <Typography
-                  variant="body2"
-                  sx={{
-                    fontWeight: 600,
-                    color: "#1F2937",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                >
-                  {currentUser.name || "User"}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  sx={{
-                    color: "#6B7280",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    display: "block",
-                  }}
-                >
-                  {currentUser.email || "user@example.com"}
-                </Typography>
-              </Box>
-              <IconButton
-                onClick={handleLogout}
-                size="small"
-                sx={{
-                  color: "#EF4444",
-                  display: { xs: "none", md: "inline-flex" },
-                }}
-              >
-                <Logout fontSize="small" />
-              </IconButton>
-            </Box>
-          )}
         </Box>
 
         <Box
@@ -266,6 +206,69 @@ const Home = () => {
               </Box>
             </Box>
           ))}
+        </Box>
+
+        <Box sx={{ mt: "auto", pt: 2, borderTop: "1px solid #E5E7EB", px: 2 }}>
+          {currentUser && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                alignItems: "center",
+                gap: { xs: 1, md: 1.5 },
+              }}
+            >
+              <Avatar
+                alt={currentUser.name}
+                src={currentUser.avatar}
+                sx={{ bgcolor: "#14a800", width: 36, height: 36 }}
+              >
+                {currentUser.name ? currentUser.name[0].toUpperCase() : "U"}
+              </Avatar>
+              <Box
+                sx={{
+                  flex: 1,
+                  minWidth: 0,
+                  display: { xs: "none", md: "block" },
+                }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{
+                    fontWeight: 600,
+                    color: "#1F2937",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {currentUser.name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  sx={{
+                    color: "#6B7280",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    display: "block",
+                  }}
+                >
+                  {currentUser.email}
+                </Typography>
+              </Box>
+              <IconButton
+                onClick={handleLogout}
+                size="small"
+                sx={{
+                  color: "#EF4444",
+                  display: "inline-flex",
+                }}
+              >
+                <Logout fontSize="small" />
+              </IconButton>
+            </Box>
+          )}
         </Box>
       </Box>
 

@@ -28,6 +28,7 @@ const TimeEntries = () => {
   const [timeEntries, setTimeEntries] = useState([]);
   const [projects, setProjects] = useState([]);
   const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const [search, setSearch] = useState("");
   const [filterProjectId, setFilterProjectId] = useState("");
@@ -54,6 +55,7 @@ const TimeEntries = () => {
   }, []);
 
   const fetchTimeEntries = useCallback(async () => {
+    setLoading(true);
     try {
       const params = {
         limit: 100,
@@ -69,6 +71,8 @@ const TimeEntries = () => {
       setTimeEntries(res.data.data?.timeEntries || []);
     } catch (error) {
       console.error("Failed to fetch time entries:", error);
+    } finally {
+      setLoading(false);
     }
   }, [filterProjectId, filterClientId, filterBilled, filterRunning, filterStartDate, filterEndDate]);
 
@@ -452,6 +456,7 @@ const TimeEntries = () => {
         timeEntries={filteredEntries}
         onEdit={handleEdit}
         onRefresh={fetchTimeEntries}
+        loading={loading}
       />
     </div>
   );
