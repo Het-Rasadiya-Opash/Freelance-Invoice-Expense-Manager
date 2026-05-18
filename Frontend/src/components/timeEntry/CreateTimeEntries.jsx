@@ -201,7 +201,6 @@ const CreateTimeEntries = ({ open, handleClose, entryToEdit, onRefresh }) => {
       }
       onRefresh();
       closeDialog();
-      // setTimeout(() => closeDialog(), 100);
     } catch (err) {
       setError(
         err.response?.data?.message ||
