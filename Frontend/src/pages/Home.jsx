@@ -27,8 +27,6 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(currentUser);
-
   useEffect(() => {
     const fetchInvoiceCount = async () => {
       try {
